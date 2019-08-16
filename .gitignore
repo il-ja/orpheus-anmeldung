@@ -1,3 +1,7 @@
 db.sqlite3
 /venv/
 /env/
+/static/
+local_*
+*.pyc
+*.*~
