@@ -5,6 +5,8 @@ import os
 
 class Teilnahme(TimeStampedModel):
     """ Klasse für Teilnahme eines Schülers """
+    teilnehmercode = models.CharField(max_length=144, verbose_name="Teilnehmercode für die PhysikOlympiade (falls vorhanden)", blank=True)
+    seminarort = models.CharField(max_length=144, verbose_name="Seminarort", choices=(('Kiel', 'Kiel, 19.-22.9.19'), ('Dresden', 'Dresden, 3.-6.10.19')), blank=False)
     vorname = models.CharField(max_length=144, verbose_name="Vorname", blank=False)
     nachname = models.CharField(max_length=144, verbose_name="Nachname", blank=False)
     geschlecht = models.CharField(max_length=1, verbose_name="Geschlecht", choices=(('m', 'm'), ('w', 'w')), blank=False)
@@ -17,6 +19,9 @@ class Teilnahme(TimeStampedModel):
     essenswünsche = models.TextField(verbose_name="Besondere Essenswünsche (vegan, koscher, etc)", blank=True)
     beeinträchtigungen = models.TextField(verbose_name="Körperliche Beeinträchtigugen (z.B. Rollstuhl)", blank=True)
     weitere_hinweise = models.TextField(verbose_name="Weitere Hinweise", blank=True)
+    formulardatei = models.FileField(null=True)
+    runtergeladen = models.BooleanField(default=False)
+    datum_eingegangen = models.DateTimeField(auto_now_add=True)
 
 
     def __str__(self):
@@ -24,11 +29,11 @@ class Teilnahme(TimeStampedModel):
 
     def erzeuge_formular(self):
         """ erzeugt und compiliert texdatei """
-        with open('/home/olymp/orpheus-anmeldung_21/local_tex/formular_ilja_template.tex', 'r', encoding='utf-8') as f:
+        with open('/home/olymp/orpheus-anmeldung_21/local_tex/formular_%s_template.tex' % (self.seminarort.lower()), 'r', encoding='utf-8') as f:
             template = f.read()
 
         text = template.format(
-            code='',
+            code=self.teilnehmercode,
             vorname=self.vorname,
             nachname=self.nachname,
             email=self.email,
@@ -41,20 +46,22 @@ class Teilnahme(TimeStampedModel):
             bundesland=self.bundesland,
             informationen=self.weitere_hinweise,
             startbahnhof='',
-            zielbahnhof='Kiel',
+            zielbahnhof='',
         )
  
         with open('/home/olymp/orpheus-anmeldung_21/local_tex/fertige_formulare/%s.tex' % self.pk, 'w', encoding='utf-8') as f:
             f.write(text)
 
         os.system('cd /home/olymp/orpheus-anmeldung_21/local_tex/fertige_formulare; pdflatex {0}.tex; pdflatex {0}.tex'.format(self.pk))
+        self.formulardatei.name = "/home/olymp/orpheus-anmeldung_21/local_tex/fertige_formulare/{0}.pdf".format(self.pk)
+        self.save()
 
     @property
     def bestaetigungstext(self):
         """ für Mailversand """
         felder = [
             self._meta.get_field(name)
-            for name in 'vorname, nachname, geburtsdatum, telefon, notfallnummer, essenswünsche, beeinträchtigungen, weitere_hinweise'.split(', ')
+            for name in 'teilnehmercode, vorname, nachname, geburtsdatum, geschlecht, telefon, notfallnummer, essenswünsche, beeinträchtigungen, weitere_hinweise'.split(', ')
         ]
         daten = '\n'.join([
             " - %s: %s" % (feld.verbose_name, getattr(self, feld.attname))
@@ -63,8 +70,10 @@ class Teilnahme(TimeStampedModel):
 
         return """Guten Tag, {vorname} {nachname},
 
-Danke für Dein Interesse, wir haben Deine Anmeldung bei uns gespeichert!
-Im Anhang findest Du ein vorausgefülltes Formular. 
+Danke für Dein Interesse, wir haben Deine Anfrage gespeichert!
+Bitte beachte, dass die Anmeldung erst durch Einsenden des ausgefüllten und unterschriebenen Formulars abgeschlossen ist.
+
+Im Anhang findest Du dein vorausgefülltes Formular. 
 Bitte prüfe die Daten gründlich, trage eventuelle Ergänzungen ein, und sende es unterschrieben an die angegebene Adresse.
 Wenn du noch Fragen hast, oder sich etwas ändern sollte, antworte bitte auf diese eMail!
 
@@ -77,3 +86,39 @@ Viele Grüße vom Orpheus e.V.
             vorname=self.vorname,
             nachname=self.nachname,
             daten=daten)
+
+    def datenzeile(self):
+        """ gibt dict mit daten für ipn-Tabelle aus """
+        daten = (
+            ('Seminarort', self.seminarort),
+            ('Nr', ' '),
+            ('Vorname', self.vorname),
+            ('Nachname', self.nachname),
+            ('TN-Code', self.teilnehmercode),
+            ('Geburtsdat.', self.geburtsdatum),
+            ('Geschlecht', self.geschlecht),
+            ('Anmeldeformular', ''),
+            ('Status', ''),
+            ('Verpflegung', self.essenswünsche),
+            ('Beeinträchtigt', self.beeinträchtigungen),
+            ('Telefon-Nr.', self.telefon),
+            ('E-Mailadresse', self.email),
+            ('Notfallrufnr. (Kontakt)', self.notfallnummer),
+            ('Notfallkontakt', ' '),
+            ('Schule', self.schule),
+            ('Bundesland', self.bundesland),
+            ('Straße', ' '),
+            ('Ort', ' '),
+            ('Veranstaltungsticket', ' '),
+            ('von', ' '),
+            ('nach', ' '),
+            ('Datum hin', '19.9.' if self.seminarort=='Kiel' else '3.10.'),
+            ('Datum rück', '22.9.' if self.seminarort=='Kiel' else '6.10.'),
+            ('Bahntix-Nr.', ' '),
+            ('Storno-Nr.', ' '),
+	    ('Datum Anmeldung', self.datum_eingegangen),
+        )       
+        return daten
+
+    class Meta:
+        verbose_name_plural = 'Anmeldungen'

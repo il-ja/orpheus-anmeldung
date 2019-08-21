@@ -1,25 +1,49 @@
 {% extends "admin/base.html" %}
 
 {% block zusatz_css %}
-<link href="/static/plugins/css/ace.min.css" type="text/css" media="all" rel="stylesheet" />
-<link href="/static/plugins/css/semantic.min.css" type="text/css" media="all" rel="stylesheet" />
-<link href="/static/plugins/css/resizable.min.css" type="text/css" media="all" rel="stylesheet" />
-<link href="/static/martor/css/martor.min.css" type="text/css" media="all" rel="stylesheet" />
-<script type="text/javascript" src="/static/markdownx/js/markdownx.js"></script>
-<script type="text/javascript" src="/static/plugins/js/jquery.min.js"></script>
-<script type="text/javascript" src="/static/plugins/js/ace.js"></script>
-<script type="text/javascript" src="/static/plugins/js/semantic.min.js"></script>
-<script type="text/javascript" src="/static/plugins/js/mode-markdown.js"></script>
-<script type="text/javascript" src="/static/plugins/js/ext-language_tools.js"></script>
-<script type="text/javascript" src="/static/plugins/js/theme-github.js"></script>
-<script type="text/javascript" src="/static/plugins/js/highlight.min.js"></script>
-<script type="text/javascript" src="/static/plugins/js/resizable.min.js"></script>
-<script type="text/javascript" src="/static/plugins/js/emojis.min.js"></script>
-<script type="text/javascript" src="/static/martor/js/martor.min.js"></script>
 {% endblock zusatz_css %}
 
 {% block content %}
-  <p> Meine Teilnahme eintrage </p>
+
+<style>
+	body{
+		margin:1em auto;
+		max-width:40em;
+		padding:0 .62em;
+		font:1.2em/1.62 sans-serif;
+	}
+
+	h1,h2,h3 {
+		line-height:1.2;
+		font-size: 2em;
+	}
+	h4 {
+		line-height:1.2;
+		font-size: 1.1em;
+	
+	}
+	@media print{
+		body{
+			max-width:none
+		}
+	}
+</style>
+
+<h1> Anmeldung zum Orpheus-Seminar 2019 </h1>
+<hr>
+<h4>Datenschutzhinweis, Verarbeitung personenbezogener Daten</h4>
+<p>
+    Die bei der Anmeldung angegebenen Daten werden zur Durchführung des Seminars erhoben, gespeichert und verarbeitet. Eine Weitergabe an Dritte erfolgt nur, sofern dies zur Durchführung des Seminars erforderlich ist. Zur Planung der Anreise können einige der Daten (u.A. Name, Bundesland und Handynummer (sofern angegeben)) von anderen Teilnehmenden eingesehen werden.<br>
+
+    Die bei der Anmeldung angegebenen persönlichen Daten werden spätestens ein Jahr nach Beendigung des Seminars gelöscht. Zu Zwecken der Berichterstattung über die PhysikOlympiade wird deine Teilnahme an dem Orpheus-Seminar zu deinem Account im ScienceOlympiadenportal vermerkt. <br>
+    
+    Deine personenbezogenen Daten können jederzeit mit einer Nachricht an info@orpheus-verein.de gelöscht werden. Des weiteren gelten die Rechte nach Art. 15-22, 34 DSGVO.
+</p>
+<hr>
+
+<h4>Anmeldung</h4>
+
+
   <form action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}

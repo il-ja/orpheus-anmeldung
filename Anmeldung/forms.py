@@ -12,7 +12,7 @@ class DateInput(forms.DateInput):
 class TeilnahmeForm(ModelForm):
     class Meta:
         model = Teilnahme
-        fields = '__all__'
+        exclude = ['formulardatei', 'runtergeladen']
         widgets = {
             'geburtsdatum': DateInput(),
         }
@@ -23,7 +23,7 @@ class TeilnahmeForm(ModelForm):
         instance.erzeuge_formular()
 
         email = EmailMessage(
-            '[orpheus-verein.de] Deine Anmeldung',
+            '[orpheus-verein.de] Deine Anmeldung zum Seminar in %s' % instance.seminarort,
             instance.bestaetigungstext,
             'seminar@orpheus-verein.de',
             [self.cleaned_data['email']],
