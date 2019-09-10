@@ -1,0 +1,12 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+  <h1> Themenwahl für {{ person.vorname }} {{ person.nachname }} </h1>
+  <p> Hier kannst du die Themen auswählen, die dich interessieren. Unser Stundenplanprogramm versucht dann, einen für alle möglichst passenden Stundenplan zu generieren. <br> Bitte trage in die Felder eine Zahl von 0 (will ich sicher nicht hören) bis 4 (sehr gern) ein! </p>
+  <form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Auswahl speichern! (weiter bearbeiten möglich)" />
+  </form>
+{% endblock content %}
+

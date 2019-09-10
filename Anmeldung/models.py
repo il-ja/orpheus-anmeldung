@@ -12,8 +12,9 @@ class Teilnahme(TimeStampedModel):
     geschlecht = models.CharField(max_length=1, verbose_name="Geschlecht", choices=(('m', 'm'), ('w', 'w')), blank=False)
     email = models.EmailField(max_length=144, verbose_name="eMail", unique=True, blank=False)
     geburtsdatum = models.DateField(blank=False)
-    telefon = models.CharField(max_length=144, verbose_name="Telefonnummer zur Planung der Anreise", blank=True)
-    notfallnummer = models.CharField(max_length=144, verbose_name="Telefonnummer der Eltern für Notfälle", blank=False)
+    notfallkontakt = models.CharField(max_length=144, verbose_name="Ansprechperson für Notfälle", blank=False)
+    notfallnummer = models.CharField(max_length=144, verbose_name="Telefonnummer der Ansprechperson für Notfälle", blank=False)
+    telefon = models.CharField(max_length=144, verbose_name="Telefonnummer zur Erreichbarkeit während der Anreise", blank=True)
     schule = models.CharField(max_length=144, verbose_name="Schule", blank=False)
     bundesland = models.CharField(max_length=144, verbose_name="Bundesland", blank=False)
     essenswünsche = models.TextField(verbose_name="Besondere Essenswünsche (vegan, koscher, etc)", blank=True)
@@ -39,7 +40,7 @@ class Teilnahme(TimeStampedModel):
             email=self.email,
             geburtsdatum=str(self.geburtsdatum),
             geschlecht=self.geschlecht,
-            notfallnummer=self.notfallnummer,
+            notfallnummer="%s, %s" % (self.notfallkontakt, self.notfallnummer),
             essenswuensche=self.essenswünsche,
             beeintraechtigungen=self.beeinträchtigungen,
             schule=self.schule, 
@@ -47,7 +48,7 @@ class Teilnahme(TimeStampedModel):
             informationen=self.weitere_hinweise,
             startbahnhof='',
             zielbahnhof='',
-        )
+        ).replace('"', "'").replace('&', r'\&').replace('_', r'\_')
  
         with open('/home/olymp/orpheus-anmeldung_21/local_tex/fertige_formulare/%s.tex' % self.pk, 'w', encoding='utf-8') as f:
             f.write(text)
@@ -61,7 +62,7 @@ class Teilnahme(TimeStampedModel):
         """ für Mailversand """
         felder = [
             self._meta.get_field(name)
-            for name in 'teilnehmercode, vorname, nachname, geburtsdatum, geschlecht, telefon, notfallnummer, essenswünsche, beeinträchtigungen, weitere_hinweise'.split(', ')
+	    for name in 'teilnehmercode, vorname, nachname, geburtsdatum, geschlecht, notfallkontakt, notfallnummer, telefon, essenswünsche, beeinträchtigungen, weitere_hinweise'.split(', ')
         ]
         daten = '\n'.join([
             " - %s: %s" % (feld.verbose_name, getattr(self, feld.attname))
@@ -104,7 +105,7 @@ Viele Grüße vom Orpheus e.V.
             ('Telefon-Nr.', self.telefon),
             ('E-Mailadresse', self.email),
             ('Notfallrufnr. (Kontakt)', self.notfallnummer),
-            ('Notfallkontakt', ' '),
+            ('Notfallkontakt', self.notfallkontakt),
             ('Schule', self.schule),
             ('Bundesland', self.bundesland),
             ('Straße', ' '),
