@@ -8,4 +8,5 @@ app_name = 'Themenwahl'
 
 urlpatterns = [
     path('<str:pk>/', views.WahlEditieren.as_view(), name='wahl'),
+    path('xml_runterladen/', views.runterladen, name='xml_runterladen'),
 ]
