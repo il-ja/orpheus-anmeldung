@@ -7,11 +7,68 @@ import os, string, random
 
 themen_dresden = [name for name in """
 Spezielle Funktionen und Vektorrechnung
-Klassische Mechanik
+Einführung ins Differenzieren
+Näherungsmethoden
 Experimentieren und Auswerten
-Aufgabenseminar Edynamik
-Experiment: Brechungsindex von Wasser
-Experiment: Erdmagnetfeld
+Einführung ins Integrieren
+Gewöhnliche Differentialgleichungen
+Fouriertransformation
+Erzwungene/Gedämpfte Schwingungen
+
+Aufgabenseminar klassische Mechanik
+Harmonische Schwingungen
+
+Reversionspendel
+Gravitationsbeschleunigung
+
+Klassische Mechanik
+Rotationsbewegungen
+Theoretische Mechanik
+Minimalprinzip
+Himmelsmechanik
+
+Aufgabenseminar Elektrodynamik
+Elektrische Blackboxen
+Erdmagnetisches Feld
+Passiver Zweipol
+
+Elektrische Schlatungen
+Elektronik
+Elektrodynamik 1
+Komplexe Wechselstromrechnung
+Elektrodynamik 2
+
+Aufgabenseminar Wärmelehre
+
+Adiabatische Zustandsänderung
+Oberflächenspannung
+Stehende Wellen
+Strömung im Rohr
+
+Thermodynamik 1
+Fluiddynamik
+Thermodynamik 2
+
+Aufgabenseminar Quanten- und Atomphysik und Struktur der Materie
+Aufgabenseminar SRT
+
+Spezielle Relativitätstheorie
+Kosmologie und Astrophysik
+Kernphysik
+Quanten- und Atomphysik I
+Quanten- und Atomphysik II
+Relativistische Teilchenphysik
+
+Bestimmung des Brechungskoeffizienten von Plexiglas
+Bestimmung des Brechungskoeffizienten von Wasser
+Geometrische Optik
+Wellenoptik
+
+Hygienemuseum
+Mathematisch-Physikalischer Salon
+Spiel und Spaß im Großen Garten
+Stadtführung
+Wandern
 """.splitlines() if name]
 
 themen_kiel = [name for name in """
