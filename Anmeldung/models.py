@@ -6,7 +6,9 @@ import os
 class Teilnahme(TimeStampedModel):
     """ Klasse für Teilnahme eines Schülers """
     teilnehmercode = models.CharField(max_length=144, verbose_name="Teilnehmercode für die PhysikOlympiade (falls vorhanden)", blank=True)
-    seminarort = models.CharField(max_length=144, verbose_name="Seminarort", choices=(('Kiel', 'Kiel, 19.-22.9.19'), ('Dresden', 'Dresden, 3.-6.10.19')), blank=False)
+    seminarort = models.CharField(max_length=144,
+    verbose_name="Seminarort", choices=(('Kiel', 'Kiel, 19.-22.9.19'),
+    ('Dresden', 'Dresden, 3.-6.10.19')), default='Dresden')
     vorname = models.CharField(max_length=144, verbose_name="Vorname", blank=False)
     nachname = models.CharField(max_length=144, verbose_name="Nachname", blank=False)
     geschlecht = models.CharField(max_length=1, verbose_name="Geschlecht", choices=(('m', 'm'), ('w', 'w')), blank=False)

@@ -35,8 +35,8 @@ Himmelsmechanik
 Aufgabenseminar Elektrodynamik
 Elektrische Blackboxen
 
-Elektrische Schaltungen
 Energie im Kondensator
+Grundlagen der Elektrik
 Elektrodynamik 1
 Komplexe Wechselstromrechnung
 Elektrodynamik 2
@@ -73,6 +73,9 @@ Hören
 Thermographie an einem Modellhaus
 Videoanalyse von Stößen ausgedehnter Körper auf einem Luftkissentisch
 
+Marieneehrenmal
+Mediendom/Computermuseum
+Stadtführung
 """.splitlines() if name]
 
 themen = set(themen_kiel + themen_dresden)

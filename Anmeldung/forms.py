@@ -26,7 +26,7 @@ def versende_mail(instance):
 class TeilnahmeForm(ModelForm):
     class Meta:
         model = Teilnahme
-        exclude = ['formulardatei', 'runtergeladen']
+        exclude = ['formulardatei', 'runtergeladen', 'seminarort']
         widgets = {
             'geburtsdatum': DateInput(),
         }
